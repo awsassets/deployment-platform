@@ -36,6 +36,13 @@ firewall-cmd --reload
   搜索[guac.guac.hostname] 改成服务器外网ip
  ```
 
+ 修改/data/frpscontrol和/data/frpstunnel下的frps.ini文件
+ ```
+ [token_auth_url]和[port_check_url]的IP、端口改成平台IP和端口
+ 
+ ```
+
+
 # 开始一键部署
 ```
 cd 到deployment目录下
