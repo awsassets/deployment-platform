@@ -57,6 +57,7 @@ services:
         volumes:
             - "/data/platform/logs:/logs"
             - "/data/platform/apps:/apps"
+            - "/data/platform/files:/baibai/uploadfiles"
         environment:
             # 环境变量
             - PARAMS=--server.port=8080 --frp.server.address=192.168.88.135 --frptunnel.server.address=192.168.88.135 --guac.guac.hostname=192.168.88.135
