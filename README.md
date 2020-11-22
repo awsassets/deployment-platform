@@ -1,8 +1,11 @@
-# 介绍
-目标通过运行go.sh脚本，即可部署整个百百后台系统
+# 文档目标
+通过运行`go.sh`脚本，即可部署整个百百后台系统
 
-环境要求centos7+docker+docker-compose
+# 环境要求
 
+### 服务器系统centos7,至少7
+
+### 服务器系统需要安装docker+docker-compose
 [点击查看docker+docker-compose安装方式](https://blog.csdn.net/weixin_38989540/article/details/107436628)
 
 `注意：要开启防火墙`
@@ -17,7 +20,22 @@ firewall-cmd --zone=public --add-port=8100/tcp --permanent
 firewall-cmd --reload
 ```
 
-# 阿里云docker源使用方式
+`需要范围开放端口,每个远控控制需要消耗一个端口，端口会进行重复利用回收`
+
+端口从7001到7050
+
+```
+firewall-cmd --zone=public --add-port=7001/tcp --permanent
+firewall-cmd --zone=public --add-port=7002/tcp --permanent
+firewall-cmd --zone=public --add-port=7003/tcp --permanent
+...
+...
+firewall-cmd --zone=public --add-port=7048/tcp --permanent
+firewall-cmd --zone=public --add-port=7049/tcp --permanent
+firewall-cmd --zone=public --add-port=7050/tcp --permanent
+```
+
+### 阿里云docker源使用方式，能够加快下载docker镜像速度
 ```
 {
   "registry-mirrors": ["https://iw3lcsa3.mirror.aliyuncs.com"]
@@ -25,7 +43,15 @@ firewall-cmd --reload
 ```
 `以上内容写入到/etc/docker/daemon.json,如果没有daemon.json文件自己创建一个`
 
-# 修改IP地址
+# 文件准备
+### 下载部署文件
+
+```
+git clone https://github.com/baibaicloud/deployment-platform.git
+cd deployment-platform
+```
+
+### 修改IP地址
 
  修改docker-compose.yml
  ```
@@ -33,17 +59,17 @@ firewall-cmd --reload
  
  搜索[frptunnel.server.address] 改成服务器外网ip
 
-  搜索[guac.guac.hostname] 改成服务器外网ip
+ 搜索[guac.guac.hostname] 改成服务器外网ip
  ```
 
- 修改/data/frpscontrol和/data/frpstunnel下的frps.ini文件
+ 修改`./data/frpscontrol`和`./data/frpstunnel`下的frps.ini文件
  ```
  [token_auth_url]和[port_check_url]的IP、端口改成平台IP和端口
  
  ```
 
 
-# 开始一键部署
+# 开始部署
 ```
 cd 到deployment目录下
 添加go.sh执行权限
@@ -69,4 +95,10 @@ success
 ![登录.png](https://img-blog.csdnimg.cn/2020072523185896.png)
 
 # 客户端安装
-[客户端](https://github.com/baibaicloud/prober)
+[客户端开源地址](https://github.com/baibaicloud/prober)
+### 客户端文件下载
+[客户端下载地址](https://github.com/baibaicloud/prober/releases)，下载最新版本，分别有windown和linux版本。
+
+客户端下载完毕之后把两个客户端文件放到服务器的`/data/platform/files/`目录下，文件名称不用修改。
+
+然后在百百系统的WEB登录界面右上角【客户端下载】菜单点击进行下载。
