@@ -44,6 +44,8 @@ services:
             driver: none
         image: registry.cn-hangzhou.aliyuncs.com/baibaicloud/guacamole-guacd:1.2.0
         network_mode: "host"
+        volumes:
+            - "/data/guacd/auditvideo:/home/guacd/file"
         
     platform:
         container_name: baibai-platform
