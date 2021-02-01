@@ -88,6 +88,7 @@ success
 ```
 
 `要重新部署系统，删除/data目录再执行go.sh即可`
+`如果没部署成功，请确保docker环境正常、docker-compose环境正常`
 
 # 访问百百系统
 [http://127.0.0.1:8080/login](http://127.0.0.1:8080/login)
@@ -99,6 +100,6 @@ success
 ### 客户端文件下载
 [客户端下载地址](https://github.com/baibaicloud/prober/releases)，下载最新版本，分别有windown和linux版本。
 
-客户端下载完毕之后把两个客户端文件放到服务器的`/data/platform/files/`目录下，文件名称不用修改。
+客户端下载完毕之后把两个客户端文件放到服务器的`/data/platform/apps/`目录下，文件名称不用修改。
 
 然后在百百系统的WEB登录界面右上角【客户端下载】菜单点击进行下载。
