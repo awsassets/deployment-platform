@@ -111,6 +111,70 @@ success
 
 要测试rdp，需要确保被控制的PC 3389端口是可用的，这个一定要确认。如何确认3389端口可用，很简单，找另一个电脑直接使用微软自带的远程发起控制，如果能够成功就可用，失败的自己找原因。
 
+
+# HTTPS部署
+
+百百客户端支持配置https的URL，百百平台系统不提供https功能，需要借助第三方工具提供，比如：nginx。
+
+### nginx 配置https代理
+
+```
+user  nginx;
+worker_processes  1;
+
+error_log  /var/log/nginx/error.log warn;
+pid        /var/run/nginx.pid;
+
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    server {
+        listen       4431 ssl;
+        server_name  localhost;
+
+        ssl_certificate      /etc/nginx/ssl/test.pem;
+        ssl_certificate_key  /etc/nginx/ssl/test.key;
+
+        ssl_session_cache    shared:SSL:1m;
+        ssl_session_timeout  5m;
+
+        ssl_ciphers  HIGH:!aNULL:!MD5;
+        ssl_prefer_server_ciphers  on;
+
+        # 这里指向百百平台系统和端口
+        location / {
+            proxy_pass http://192.168.0.100:8080/;
+        }
+    }
+
+}
+
+docker rm -f nginx && docker run -dt --name=nginx --net=host -v /data/nginx/ssl:/etc/nginx/ssl -v /data/nginx/nginx.conf:/etc/nginx/nginx.conf nginx
+
+```
+
+`注意：部署https时，http端口可用不用暴露到公网，但要暴露给frp服务`
+
 # 插个私人广告 BB-API HTTP请求工具
 致力于打造简洁、免费、好用的HTTP模拟请求工具，自动生成接口文档。
 
