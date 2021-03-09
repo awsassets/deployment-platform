@@ -152,7 +152,7 @@ http {
     #gzip  on;
 
     server {
-        listen       4431 ssl;
+        listen       443 ssl;
         server_name  localhost;
 
         ssl_certificate      /etc/nginx/ssl/test.pem;
@@ -161,12 +161,17 @@ http {
         ssl_session_cache    shared:SSL:1m;
         ssl_session_timeout  5m;
 
-        ssl_ciphers  HIGH:!aNULL:!MD5;
-        ssl_prefer_server_ciphers  on;
+	      ssl_protocols SSLv3 SSLv2 TLSv1 TLSv1.1 TLSv1.2;
+	      ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+        ssl_prefer_server_ciphers on;
 
-        # 这里指向百百平台系统和端口
         location / {
             proxy_pass http://192.168.0.100:8080/;
+            proxy_http_version 1.1;    
+     	      proxy_set_header Upgrade $http_upgrade;    
+            proxy_set_header Connection "Upgrade";    
+            proxy_set_header X-real-ip $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
         }
     }
 
